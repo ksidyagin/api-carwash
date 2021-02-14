@@ -28,8 +28,7 @@ export class UserEntity {
     @Column({type: 'enum', enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
-    @BeforeInsert()
-    emailToLowerCase() {
-        this.email = this.email.toLowerCase();
-    }
+    @Column({default: 0 })
+    visits: number;
+
 }

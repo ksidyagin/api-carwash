@@ -8,9 +8,12 @@ export interface User {
     phone?: string;
     city?: string; 
     role?: UserRole;
+    visits?: number;
 }
 
 export enum UserRole {
     ADMIN = 'admin',
-    USER = 'user'
+    USER = 'user',
+    EXECUTOR = 'executor',
+    MANAGER = 'manager'
 }

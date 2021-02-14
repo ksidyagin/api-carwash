@@ -3,6 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './modules/auth/auth.module';
+import { CarwashModule } from './modules/carwash/carwash.module';
+import { CategoryModule } from './modules/category/category.module';
+import { ServiceModule } from './modules/service/service.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
@@ -18,9 +22,13 @@ import { UserModule } from './modules/user/user.module';
       autoLoadEntities: true,
       synchronize: true
     }),
-    UserModule
+    UserModule,
+    AuthModule,
+    CarwashModule,
+    CategoryModule,
+    ServiceModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {}
