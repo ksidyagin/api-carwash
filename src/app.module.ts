@@ -17,8 +17,8 @@ import { UserModule } from './modules/user/user.module';
       host: process.env.HOST,
       port: 8888,
       username: 'superadmin',
-      password: 'root',
-      database: 'ololo',
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
       autoLoadEntities: true,
       synchronize: true
     }),
