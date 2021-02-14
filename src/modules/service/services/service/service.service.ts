@@ -28,7 +28,7 @@ export class ServiceService
   
     findAll(): Observable<Service[]> 
     {
-        return from(this.carwashRepository.find( {relations: ['category']}));
+        return from(this.carwashRepository.find());
     }
   
     deleteOne(id: number): Observable<any> 
