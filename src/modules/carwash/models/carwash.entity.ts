@@ -1,4 +1,6 @@
 import { CategoryEntity } from "src/modules/category/models/category.entity";
+import { OrderEntity } from "src/modules/order/models/order.entity";
+import { Order } from "src/modules/order/models/order.interface";
 import { BeforeInsert, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 
@@ -23,11 +25,13 @@ export class CarwashEntity
     @Column()
     workTime_weekend: string;
 
-    @Column()
-    rating: string;
+    @Column({type:'float'})
+    rating: number;
 
-    @OneToMany(type => CategoryEntity, categories => categories.carwash, { cascade: ['insert', 'update'] })
+    @OneToMany(type => CategoryEntity, categories => categories.carwash)
     service_categories: CategoryEntity[];
 
+    @OneToMany(type => OrderEntity, order => order.carwash_entry)
+    orders_list: OrderEntity[];
 
 }

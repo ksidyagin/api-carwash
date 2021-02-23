@@ -1,3 +1,4 @@
+import { Client } from "src/modules/client/models/client.interface";
 
 export interface User {
     id?: number;
@@ -8,7 +9,7 @@ export interface User {
     phone?: string;
     city?: string; 
     role?: UserRole;
-    visits?: number;
+    client_entry?: Client;
 }
 
 export enum UserRole {

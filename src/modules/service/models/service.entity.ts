@@ -11,10 +11,10 @@ export class ServiceEntity {
     @Column()
     description: string;
 
-    @Column()
+    @Column({type: 'float'})
     price: number;
 
     @ManyToOne(type => CategoryEntity, category => category.services)
-    category: Category;
+    category: CategoryEntity;
 
 }

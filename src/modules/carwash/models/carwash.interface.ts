@@ -1,4 +1,5 @@
 import { Category } from "src/modules/category/models/category.interface";
+import { Order } from "src/modules/order/models/order.interface";
 
 export interface Carwash 
 {
@@ -8,6 +9,7 @@ export interface Carwash
     phone?: string;
     workTime_weekday?: string;
     workTime_weekend?: string;
-    rating?: string;
+    rating?: number;
     service_categories?: Category[];
+    orders_list?: Order[];
 }

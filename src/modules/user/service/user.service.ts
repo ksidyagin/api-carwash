@@ -11,10 +11,14 @@ import {
     paginate,
     Pagination,
     IPaginationOptions} from 'nestjs-typeorm-paginate';
+import { ClientService } from 'src/modules/client/services/client/client.service';
+import { ClientEntity } from 'src/modules/client/models/client.entity';
+import { Client } from 'src/modules/client/models/client.interface';
 @Injectable()
 export class UserService {
   constructor(
       @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+      @InjectRepository(ClientEntity) private readonly clientRepository: Repository<ClientEntity>,
       private authService: AuthService
   ){}
 
@@ -23,6 +27,7 @@ export class UserService {
         return this.authService.hashPassword(user.password).pipe(
             switchMap((passwordHash: string) => {
                 const newUser = new UserEntity();
+                const newClient= new ClientEntity();
                 newUser.firstName = user.firstName;
                 newUser.lastName = user.lastName;
                 newUser.email = user.email;
@@ -30,6 +35,10 @@ export class UserService {
                 newUser.phone = user.phone;
                 newUser.city = user.city;  
                 newUser.role = UserRole.USER;
+                newClient.name = user.firstName;
+                newClient.description = "";
+                this.clientRepository.save(newClient);
+                newUser.client_entry = newClient;
 
                 return from(this.userRepository.save(newUser)).pipe(
                     map((user: User) => {

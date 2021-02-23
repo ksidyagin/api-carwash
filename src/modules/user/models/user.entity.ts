@@ -1,4 +1,6 @@
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ClientEntity } from "src/modules/client/models/client.entity";
+import { Client } from "src/modules/client/models/client.interface";
+import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserRole } from "./user.interface";
 
 
@@ -28,7 +30,7 @@ export class UserEntity {
     @Column({type: 'enum', enum: UserRole, default: UserRole.USER })
     role: UserRole;
 
-    @Column({default: 0 })
-    visits: number;
-
+    @OneToOne(() => ClientEntity, client => client.user_entry)
+    client_entry: ClientEntity;
+   
 }
