@@ -14,7 +14,7 @@ export class ServiceEntity {
     @Column({type: 'float'})
     price: number;
 
-    @ManyToOne(type => CategoryEntity, category => category.services)
+    @ManyToOne(() => CategoryEntity, category => category.services)
     category: CategoryEntity;
 
 }

@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { access } from 'fs';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of } from 'rxjs';
@@ -9,6 +10,7 @@ import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { User, UserRole } from '../models/user.interface';
 import { UserService } from '../service/user.service';
 
+@ApiTags('users')
 @Controller('users')
 export class UserController {
 

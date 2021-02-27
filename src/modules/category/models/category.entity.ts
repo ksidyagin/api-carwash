@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { CarwashEntity } from "src/modules/carwash/models/carwash.entity";
 import { ServiceEntity } from "src/modules/service/models/service.entity";
 import { Service } from "src/modules/service/models/service.interface";
@@ -6,16 +7,20 @@ import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, Primary
 
 @Entity()
 export class CategoryEntity {
+    @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
     id: number;
     
+    @ApiProperty()
     @Column()
     name: string;
 
-    @OneToMany(type => ServiceEntity, service => service.category, { cascade: ['insert', 'update'] })
+    @ApiProperty({required: false})
+    @OneToMany(() => ServiceEntity, service => service.category, { cascade: ['insert', 'update'] })
     services: ServiceEntity[];
 
-    @ManyToOne(type => CarwashEntity, carwash => carwash.service_categories)
+    @ApiProperty()
+    @ManyToOne(() => CarwashEntity, carwash => carwash.service_categories)
     carwash: CarwashEntity;
 
 }

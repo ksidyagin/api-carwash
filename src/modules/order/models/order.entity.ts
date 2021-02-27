@@ -1,3 +1,4 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { CarwashEntity } from "src/modules/carwash/models/carwash.entity";
 import { ClientAutoEntity } from "src/modules/client-auto/models/client-auto.entity";
 import { ClientEntity } from "src/modules/client/models/client.entity";
@@ -6,34 +7,44 @@ import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyTo
 
 @Entity()
 export class OrderEntity {
+    @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
     id: number;
     
-    @ManyToOne(type => CarwashEntity, carwash => carwash.orders_list)
+    @ApiProperty()
+    @ManyToOne(() => CarwashEntity, carwash => carwash.orders_list)
     carwash_entry: CarwashEntity;
 
-    @ManyToOne(type => ClientEntity, client => client.orders)
+    @ApiProperty()
+    @ManyToOne(() => ClientEntity, client => client.orders)
     client_entry: ClientEntity;
 
-    @ManyToOne(type => ClientAutoEntity, auto => auto.order_entries)
+    @ApiProperty()
+    @ManyToOne(() => ClientAutoEntity, auto => auto.order_entries)
     auto: ClientAutoEntity;
 
+    @ApiProperty()
     @ManyToMany(() => ServiceEntity)
     @JoinTable()
     selected_services: ServiceEntity[];
 
+    @ApiProperty()
     @Column({type: 'timestamp'})
     selected_time: Date;
 
+    @ApiProperty()
     @Column()
     status: string;
 
+    @ApiProperty({required: false})
     @Column({type: 'int', default: 0})
     evaluation: number;
 
+    @ApiProperty({required: false})
     @Column({default:''})
     comment: string;
 
+    @ApiProperty()
     @Column({type: 'float'})
     total_price: number;
 
