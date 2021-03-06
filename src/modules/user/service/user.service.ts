@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist';
 import { from, Observable, throwError } from 'rxjs';
 import { AuthService } from 'src/modules/auth/services/auth.service';
@@ -14,18 +14,54 @@ import {
 import { ClientService } from 'src/modules/client/services/client/client.service';
 import { ClientEntity } from 'src/modules/client/models/client.entity';
 import { Client } from 'src/modules/client/models/client.interface';
+import { MailerService } from '@nestjs-modules/mailer';
+import { randomBytes } from 'crypto';
+
+export class EmailSend {
+    email_receiver?: string;
+}
+
 @Injectable()
 export class UserService {
   constructor(
       @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
       @InjectRepository(ClientEntity) private readonly clientRepository: Repository<ClientEntity>,
-      private authService: AuthService
+      private authService: AuthService, private mailerService: MailerService
   ){}
 
+    private code: string;
+    generateCode(): string {
+        let code: string = "";
+    
+        do {
+            code += randomBytes(3).readUIntBE(0, 3);
+            // code += Number.parseInt(randomBytes(3).toString("hex"), 16);
+        } while (code.length < 6);
+    
+        return code.slice(0, 6);
+    }
+    sendEmail(receiverEmail: EmailSend): void {
+     this.code = this.generateCode();
+     this.mailerService.sendMail({
+        to: `${receiverEmail.email_receiver}`, // list of receivers
+        from: `${process.env.MAILDEV_USER}`, // sender address
+        subject: 'Testing Nest MailerModule ✔', // Subject line
+        text: 'welcome!', // plaintext body
+        html: `<b>Welcome!</b> 
+        <br> Is your code for registration : <p> ${this.code} </p> <br>
+        Don't tell it to anyone!`, // HTML body content
+      })
+      .then(() => {})
+      .catch(() => {});
+  }
 
-    create(user: User): Observable<User> {
-        return this.authService.hashPassword(user.password).pipe(
+    async create(user: User): Promise<Observable<User>> {
+        return (await this.authService.hashPassword(user.password)).pipe(
             switchMap((passwordHash: string) => {
+                if(this.findByEmail(user.email) != null)
+                {
+                    throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
+                }
                 const newUser = new UserEntity();
                 const newClient= new ClientEntity();
                 newUser.firstName = user.firstName;
@@ -102,7 +138,7 @@ export class UserService {
                   return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
               }
               else {
-                  return 'Wrong Credentials';
+                throw new HttpException('Wrong email or password', HttpStatus.BAD_REQUEST);
               }
           })
       )

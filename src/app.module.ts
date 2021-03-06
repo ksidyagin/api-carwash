@@ -1,3 +1,4 @@
+import { MailerModule } from '@nestjs-modules/mailer';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm/dist';
@@ -11,7 +12,9 @@ import { ClientModule } from './modules/client/client.module';
 import { OrderModule } from './modules/order/order.module';
 import { ServiceModule } from './modules/service/service.module';
 import { UserModule } from './modules/user/user.module';
-
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { WarehouseModule } from './modules/warehouse/warehouse.module';
+import { ProductModule } from './modules/product/product.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -26,6 +29,25 @@ import { UserModule } from './modules/user/user.module';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        auth: {
+          user: process.env.MAILDEV_USER,
+          pass: process.env.MAILDEV_PASS,
+        },
+      },
+      defaults: {
+        from:`"No reply" <${process.env.MAILDEV_USER}>`,
+      },
+      template: {
+        dir: __dirname + '/templates',
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
     UserModule,
     AuthModule,
     CarwashModule,
@@ -33,8 +55,9 @@ import { UserModule } from './modules/user/user.module';
     ServiceModule,
     OrderModule,
     ClientModule,
-    ClientAutoModule
-    
+    ClientAutoModule,
+    WarehouseModule,
+    ProductModule
 
   ],
   controllers: [AppController],

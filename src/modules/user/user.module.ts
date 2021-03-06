@@ -5,10 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist';
 import { UserEntity } from './models/user.entity';
 import { AuthModule } from '../auth/auth.module';
 import { ClientModule } from '../client/client.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
+    
     forwardRef(() => AuthModule),
     forwardRef(()=> ClientModule)
   ],

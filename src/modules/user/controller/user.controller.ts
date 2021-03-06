@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { access } from 'fs';
 import { Pagination } from 'nestjs-typeorm-paginate';
@@ -8,7 +8,7 @@ import { hasRoles } from 'src/modules/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-guard';
 import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { User, UserRole } from '../models/user.interface';
-import { UserService } from '../service/user.service';
+import { EmailSend, UserService } from '../service/user.service';
 
 @ApiTags('users')
 @Controller('users')
@@ -17,26 +17,33 @@ export class UserController {
     constructor(private userService: UserService) {}
 
     @Post()
-    create(@Body()user: User): Observable<User | Object> {
-        return this.userService.create(user).pipe(
+    async create(@Body()user: User): Promise<Observable<User | Object>> {
+        return (await this.userService.create(user)).pipe(
             map((user: User) => user),
             catchError(err => of({error: err.message}))
         );
     }
 
     @Post('login')
+    
     login(@Body()user: User): Observable<Object> {
         return this.userService.login(user).pipe(
-            map((jwt: string) => {return {access_token: jwt};
-        })
+            map((jwt: string) => {return {access_token: jwt}  
+        }),
+        catchError(err => of({ error: err.message}))
         )
     }
+    
 
     @Get(':id')
     findOne(@Param()params): Observable<User> {
         return this.userService.findOne(params.id);
     }
 
+    @Post('email-send')
+    send(@Body()emailRecevier: EmailSend): void {
+        return this.userService.sendEmail(emailRecevier);
+    }
 
     @Get()
     index( @Query('page') page: number = 1,
