@@ -22,12 +22,12 @@ export class CategoryService {
   
   
     findOne(id: number): Observable<Category> {
-        return from(this.categoryRepository.findOne({id},  {relations: ['carwash']}));
+        return from(this.categoryRepository.findOne({id},  {relations: ['carwash', 'services']}));
     }
   
     findAll(): Observable<Category[]> 
     {
-        return from(this.categoryRepository.find({relations: ['carwash']}));
+        return from(this.categoryRepository.find({relations: ['carwash', 'services']}));
     }
   
     deleteOne(id: number): Observable<any> 

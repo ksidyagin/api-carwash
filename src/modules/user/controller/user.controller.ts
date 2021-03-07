@@ -41,7 +41,7 @@ export class UserController {
     }
 
     @Post('email-send')
-    send(@Body()emailRecevier: EmailSend): void {
+    send(@Body()emailRecevier: EmailSend): string {
         return this.userService.sendEmail(emailRecevier);
     }
 

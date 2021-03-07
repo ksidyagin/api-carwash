@@ -40,7 +40,7 @@ export class UserService {
     
         return code.slice(0, 6);
     }
-    sendEmail(receiverEmail: EmailSend): void {
+    sendEmail(receiverEmail: EmailSend): string {
      this.code = this.generateCode();
      this.mailerService.sendMail({
         to: `${receiverEmail.email_receiver}`, // list of receivers
@@ -53,6 +53,8 @@ export class UserService {
       })
       .then(() => {})
       .catch(() => {});
+
+      return this.code;
   }
 
     async create(user: User): Promise<Observable<User>> {
