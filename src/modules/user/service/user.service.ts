@@ -60,10 +60,7 @@ export class UserService {
     async create(user: User): Promise<Observable<User>> {
         return (await this.authService.hashPassword(user.password)).pipe(
             switchMap((passwordHash: string) => {
-                if(this.findByEmail(user.email) != null)
-                {
-                    throw new HttpException('User with that email already exists', HttpStatus.BAD_REQUEST);
-                }
+               
                 const newUser = new UserEntity();
                 const newClient= new ClientEntity();
                 newUser.firstName = user.firstName;
