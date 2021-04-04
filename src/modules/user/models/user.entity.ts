@@ -3,7 +3,7 @@ import { type } from "os";
 import { ClientEntity } from "src/modules/client/models/client.entity";
 import { Client } from "src/modules/client/models/client.interface";
 import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { UserRole } from "./user.interface";
+import { UserRole, UserStatus } from "./user.interface";
 
 
 @Entity()
@@ -44,4 +44,7 @@ export class UserEntity {
     @OneToOne(() => ClientEntity, client => client.user_entry)
     client_entry: ClientEntity;
    
+    @ApiProperty()
+    @Column({type: 'enum', enum: UserStatus, default: UserStatus.pending })
+    status?: UserStatus;
 }

@@ -16,6 +16,4 @@ export class WarehouseEntity {
     @OneToMany(()=> ProductEntity, product => product.warehouse)
     products: ProductEntity[];
 
-
-
 }

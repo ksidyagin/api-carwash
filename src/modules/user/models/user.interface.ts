@@ -29,6 +29,9 @@ export class User {
 
     @ApiProperty({required: false})
     client_entry?: Client;
+
+    @ApiProperty()
+    status?: UserStatus;
 }
 
 export enum UserRole {
@@ -36,4 +39,10 @@ export enum UserRole {
     USER = 'user',
     EXECUTOR = 'executor',
     MANAGER = 'manager'
+}
+
+export enum UserStatus {
+    blocked = 'blocked',
+    pending = 'pending',
+    active = 'active'
 }

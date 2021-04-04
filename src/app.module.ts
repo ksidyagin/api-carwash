@@ -15,6 +15,7 @@ import { UserModule } from './modules/user/user.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { WarehouseModule } from './modules/warehouse/warehouse.module';
 import { ProductModule } from './modules/product/product.module';
+import { TokenModule } from './modules/token/token.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -50,6 +51,7 @@ import { ProductModule } from './modules/product/product.module';
     }),
     UserModule,
     AuthModule,
+    TokenModule,
     CarwashModule,
     CategoryModule,
     ServiceModule,
@@ -58,7 +60,6 @@ import { ProductModule } from './modules/product/product.module';
     ClientAutoModule,
     WarehouseModule,
     ProductModule
-
   ],
   controllers: [AppController],
   providers: [AppService]

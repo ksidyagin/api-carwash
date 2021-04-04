@@ -1,10 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist';
 import { from, Observable, throwError } from 'rxjs';
 import { AuthService } from 'src/modules/auth/services/auth.service';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../models/user.entity';
-import { User, UserRole } from '../models/user.interface';
+import { User, UserRole, UserStatus } from '../models/user.interface';
 import {switchMap, map, catchError} from 'rxjs/operators';
 import { use } from 'passport';
 import {
@@ -14,19 +14,16 @@ import {
 import { ClientService } from 'src/modules/client/services/client/client.service';
 import { ClientEntity } from 'src/modules/client/models/client.entity';
 import { Client } from 'src/modules/client/models/client.interface';
-import { MailerService } from '@nestjs-modules/mailer';
 import { randomBytes } from 'crypto';
+import { TokenService } from 'src/modules/token/services/token.service';
 
-export class EmailSend {
-    email_receiver?: string;
-}
 
 @Injectable()
 export class UserService {
   constructor(
       @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
       @InjectRepository(ClientEntity) private readonly clientRepository: Repository<ClientEntity>,
-      private authService: AuthService, private mailerService: MailerService
+      private authService: AuthService, private tokenService: TokenService
   ){}
 
     private code: string;
@@ -35,27 +32,10 @@ export class UserService {
     
         do {
             code += randomBytes(3).readUIntBE(0, 3);
-            // code += Number.parseInt(randomBytes(3).toString("hex"), 16);
         } while (code.length < 6);
     
         return code.slice(0, 6);
     }
-    sendEmail(receiverEmail: EmailSend): string {
-     this.code = this.generateCode();
-     this.mailerService.sendMail({
-        to: `${receiverEmail.email_receiver}`, // list of receivers
-        from: `${process.env.MAILDEV_USER}`, // sender address
-        subject: 'Testing Nest MailerModule ✔', // Subject line
-        text: 'welcome!', // plaintext body
-        html: `<b>Welcome!</b> 
-        <br> Is your code for registration : <p> ${this.code} </p> <br>
-        Don't tell it to anyone!`, // HTML body content
-      })
-      .then(() => {})
-      .catch(() => {});
-
-      return this.code;
-  }
 
     async create(user: User): Promise<Observable<User>> {
         return (await this.authService.hashPassword(user.password)).pipe(
@@ -78,6 +58,7 @@ export class UserService {
                 return from(this.userRepository.save(newUser)).pipe(
                     map((user: User) => {
                         const {password, ...result} = user;
+                        this.authService.sendEmail(newUser);
                         return result;
                     }),
                     catchError(err => throwError(err))
@@ -120,9 +101,9 @@ export class UserService {
   }
 
   updateOne(id: number, user: User): Observable<any> {
-      delete user.email;
-      delete user.password;
-      delete user.role;
+    //   delete user.email;
+    //   delete user.password;
+    //   delete user.role;
       return from(this.userRepository.update(id, user));
   }
 
@@ -162,4 +143,31 @@ export class UserService {
   findByEmail(email: string): Observable<User> {
       return from(this.userRepository.findOne({email}));
   }
+
+  findUserByEmail(email: string): Observable<User> {
+    return this.findByEmail(email).pipe(
+        map((user: User) => {
+            if(user){
+                return user;
+            }
+            else {
+                return null;
+            }
+        })
+    );  
+  }
+
+
+   async confirm(token: string): Promise<Observable<any>> {
+    const data =  this.authService.verifyToken(token);
+    const user =  await this.userRepository.findOne(data.id);
+
+    this.tokenService.deleteOne(data._id, token);
+
+    if (user) {
+        user.status = UserStatus.active;
+        return from (this.userRepository.update(data.id, user));
+    }
+    throw new BadRequestException('Confirmation error');
+}
 }
