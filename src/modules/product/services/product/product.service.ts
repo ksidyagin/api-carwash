@@ -18,12 +18,12 @@ export class ProductService {
   
   
     findOne(id: number): Observable<Product> {
-        return from(this.productRepository.findOne({id}));
+        return from(this.productRepository.findOne({id},{relations: ['warehouse']}));
     }
   
     findAll(): Observable<Product[]> 
     {
-        return from(this.productRepository.find());
+        return from(this.productRepository.find({relations: ['warehouse']}));
     }
   
     deleteOne(id: number): Observable<any> 

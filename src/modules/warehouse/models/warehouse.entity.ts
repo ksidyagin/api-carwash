@@ -8,6 +8,7 @@ export class WarehouseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     
+    @Column()
     name: string;
 
     @ManyToOne(() => CategoryEntity, category => category.warehouses)
