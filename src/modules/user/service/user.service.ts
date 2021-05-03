@@ -52,17 +52,28 @@ export class UserService {
                 newUser.role = UserRole.USER;
                 newClient.name = user.firstName;
                 newClient.description = "";
-                this.clientRepository.save(newClient);
                 newUser.client_entry = newClient;
-
-                return from(this.userRepository.save(newUser)).pipe(
-                    map((user: User) => {
-                        const {password, ...result} = user;
-                        this.authService.sendEmail(newUser);
-                        return result;
-                    }),
-                    catchError(err => throwError(err))
+                const email : string = user.email;
+                return from(this.userRepository.findOne({email})).pipe(
+                    switchMap((userFind: User) => {
+                        if(userFind){
+                            throw new HttpException("User with this email is already exists", HttpStatus.BAD_REQUEST);
+                        }
+                        else{
+                            return from(this.userRepository.save(newUser)).pipe(
+                                map((user: User) => {
+                                    const {password, ...result} = user;
+                                    this.authService.sendEmail(newUser);
+                                    return result;
+                                }),
+                                catchError(err => throwError(err))
+                            )
+                        }
+                    })
                 )
+                   
+                
+               
             })
         )
     }
@@ -97,7 +108,19 @@ export class UserService {
   }
 
   deleteOne(id: number): Observable<any> {
-      return from(this.userRepository.delete(id));
+      return from(this.userRepository.findOne({id}, {relations: ['client_entry']})).pipe(
+          map((user: User) => {
+              if(user)
+              {
+                this.clientRepository.delete(user.client_entry.id);
+                return from(this.userRepository.delete(id));
+              }
+              else
+              {
+                throw new HttpException("This user is not exists", HttpStatus.BAD_REQUEST);
+              }
+          })
+      )
   }
 
   updateOne(id: number, user: User): Observable<any> {
@@ -169,5 +192,5 @@ export class UserService {
         return from (this.userRepository.update(data.id, user));
     }
     throw new BadRequestException('Confirmation error');
-}
+    }
 }

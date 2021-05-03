@@ -38,8 +38,8 @@ export class UserController {
     
 
     @Get(':id')
-    findOne(@Param()params): Observable<User> {
-        return this.userService.findOne(params.id);
+    findOne(@Param('id') id: number): Observable<any> {
+        return this.userService.findOne(id);
     }
 
     @Get()

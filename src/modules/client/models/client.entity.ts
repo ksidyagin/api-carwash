@@ -19,11 +19,11 @@ export class ClientEntity {
     name: string;
 
     @ApiProperty({required: false})
-    @OneToMany(type => ClientAutoEntity, auto => auto.owner)
+    @OneToMany(type => ClientAutoEntity, auto => auto.owner, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     cars: ClientAutoEntity[];
 
     @ApiProperty({required: false})
-    @OneToOne(type => UserEntity, user => user.client_entry)
+    @OneToOne(type => UserEntity, user => user.client_entry, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     user_entry: UserEntity;
 
     @ApiProperty({required: false})

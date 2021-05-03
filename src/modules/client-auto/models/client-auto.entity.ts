@@ -32,7 +32,7 @@ export class ClientAutoEntity {
     region: number;
 
     @ApiProperty()
-    @ManyToOne(type => ClientEntity, client => client.cars)
+    @ManyToOne(type => ClientEntity, client => client.cars, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     owner: ClientEntity;
 
     @ApiProperty({required: false})

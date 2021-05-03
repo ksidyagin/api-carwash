@@ -41,9 +41,12 @@ export class UserEntity {
     role: UserRole;
 
     @ApiProperty({required: false})
-    @OneToOne(() => ClientEntity, client => client.user_entry)
+    @OneToOne(() => ClientEntity, client => client.user_entry, {cascade: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE', eager: true})
+    @JoinColumn()
     client_entry: ClientEntity;
-   
+    
     @ApiProperty()
     @Column({type: 'enum', enum: UserStatus, default: UserStatus.pending })
     status?: UserStatus;
