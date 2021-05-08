@@ -20,7 +20,7 @@ export class ClientAuto
     state_number?: string;
 
     @ApiProperty()
-    region?: number;
+    region?: string;
 
     @ApiProperty({type: () => Client})
     owner?: Client;

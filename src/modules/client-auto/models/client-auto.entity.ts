@@ -28,8 +28,8 @@ export class ClientAutoEntity {
     state_number?: string;
 
     @ApiProperty()
-    @Column({type:'int'})
-    region?: number;
+    @Column()
+    region?: string;
 
     @ApiProperty()
     @ManyToOne(type => ClientEntity, client => client.cars, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
