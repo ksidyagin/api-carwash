@@ -3,7 +3,7 @@ import { Warehouse } from "src/modules/warehouse/models/warehouse.model";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class ActOfDebitingEntity {
+export class InternalDisplacementEntity {
 
     @PrimaryGeneratedColumn()
     id?: number;
@@ -11,8 +11,11 @@ export class ActOfDebitingEntity {
     @Column()
     comment?: string;
 
-    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.acts_of_debiting, {onDelete: 'CASCADE'})
+    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.internal_displacements, {onDelete: 'CASCADE'})
     warehouse_deleted?: WarehouseEntity;
+
+    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.internal_displacements, {onDelete: 'CASCADE'})
+    warehouse_added?: WarehouseEntity;
 
     @Column()
     name_product?: string;
@@ -27,5 +30,6 @@ export class ActOfDebitingEntity {
     date?: Date;
 
     @Column({type: 'timestamp'})
-    date_event?: Date;
+    date_receipt?: Date;
+   
 }

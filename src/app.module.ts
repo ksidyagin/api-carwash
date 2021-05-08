@@ -16,6 +16,9 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { WarehouseModule } from './modules/warehouse/warehouse.module';
 import { ProductModule } from './modules/product/product.module';
 import { TokenModule } from './modules/token/token.module';
+import { ActOfDebitingModule } from './modules/act-of-debiting/act-of-debiting.module';
+import { InternalDisplacementModule } from './modules/internal-displacement/internal-displacement.module';
+import { ReceiptInvoiceModule } from './modules/receipt-invoice/receipt-invoice.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -58,8 +61,13 @@ import { TokenModule } from './modules/token/token.module';
     OrderModule,
     ClientModule,
     ClientAutoModule,
+    ReceiptInvoiceModule,
+    ActOfDebitingModule,
+    InternalDisplacementModule,
     WarehouseModule,
     ProductModule
+    
+    
   ],
   controllers: [AppController],
   providers: [AppService]

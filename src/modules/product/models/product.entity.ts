@@ -4,19 +4,19 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export class ProductEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @Column()
-    name: string;
+    name?: string;
 
-    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.products)
-    warehouse: WarehouseEntity;
+    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.products, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    warehouse?: WarehouseEntity;
 
     @Column({type: 'int', default: 0})
-    count: number;
+    count?: number;
 
     @Column()
-    measurement: string;
+    measurement?: string;
 
 
 

@@ -6,15 +6,15 @@ import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedCo
 @Entity()
 export class ServiceEntity {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @Column()
-    description: string;
+    description?: string;
 
     @Column({type: 'float'})
-    price: number;
+    price?: number;
 
     @ManyToOne(() => CategoryEntity, category => category.services)
-    category: CategoryEntity;
+    category?: CategoryEntity;
 
 }

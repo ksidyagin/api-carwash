@@ -10,42 +10,42 @@ import { UserRole, UserStatus } from "./user.interface";
 export class UserEntity {
     @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @ApiProperty()
     @Column()
-    firstName: string;
+    firstName?: string;
 
     @ApiProperty()
     @Column()
-    lastName: string;
+    lastName?: string;
 
     @ApiProperty()
     @Column()
-    email: string;
+    email?: string;
 
     @ApiProperty()
     @Column()
-    password: string;
+    password?: string;
 
     @ApiProperty()
     @Column()
-    phone: string;
+    phone?: string;
 
     @ApiProperty()
     @Column()
-    city: string;    
+    city?: string;    
 
     @ApiProperty({required: false})
     @Column({type: 'enum', enum: UserRole, default: UserRole.USER })
-    role: UserRole;
+    role?: UserRole;
 
     @ApiProperty({required: false})
     @OneToOne(() => ClientEntity, client => client.user_entry, {cascade: true,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE', eager: true})
     @JoinColumn()
-    client_entry: ClientEntity;
+    client_entry?: ClientEntity;
     
     @ApiProperty()
     @Column({type: 'enum', enum: UserStatus, default: UserStatus.pending })

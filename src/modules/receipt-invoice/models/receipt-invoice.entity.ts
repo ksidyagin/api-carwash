@@ -1,7 +1,8 @@
 import { WarehouseEntity } from "src/modules/warehouse/models/warehouse.entity";
-import { Column, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
-export class ReceiptInvoice {
+@Entity()
+export class ReceiptInvoiceEntity {
 
     @PrimaryGeneratedColumn()
     id?: number;
@@ -15,10 +16,13 @@ export class ReceiptInvoice {
     @Column()
     incoming_number?: string;   
 
-    @ManyToOne(() => WarehouseEntity, warehouse => warehouse)
+    @ManyToOne(() => WarehouseEntity, warehouse => warehouse.receipt_invoices, { onDelete: 'CASCADE'})
     warehouse_entry?: WarehouseEntity;
 
-    @Column()
+    @Column({type: 'timestamp'})
+    date?: Date;
+
+    @Column({type: 'timestamp'})
     date_receipt?: Date;
 
     @Column()

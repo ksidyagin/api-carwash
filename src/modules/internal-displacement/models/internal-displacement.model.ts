@@ -9,10 +9,10 @@ export class InternalDisplacement {
     @ApiProperty()
     comment?: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => Warehouse})
     warehouse_deleted?: Warehouse;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => Warehouse})
     warehouse_added?: Warehouse;
 
     @ApiProperty()
@@ -24,5 +24,9 @@ export class InternalDisplacement {
     @ApiProperty()
     count?: number;
 
-   
+    @ApiProperty()
+    date?: Date;
+
+    @ApiProperty()
+    date_receipt?: Date;
 }

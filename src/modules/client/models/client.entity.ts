@@ -12,45 +12,45 @@ import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOn
 export class ClientEntity {
     @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @ApiProperty({required: false})
     @Column()
-    name: string;
+    name?: string;
 
     @ApiProperty({required: false})
     @OneToMany(type => ClientAutoEntity, auto => auto.owner, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-    cars: ClientAutoEntity[];
+    cars?: ClientAutoEntity[];
 
     @ApiProperty({required: false})
     @OneToOne(type => UserEntity, user => user.client_entry, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-    user_entry: UserEntity;
+    user_entry?: UserEntity;
 
     @ApiProperty({required: false})
     @OneToMany(type => OrderEntity, order => order.client_entry)
-    orders: OrderEntity[];
+    orders?: OrderEntity[];
 
     @ApiProperty({required: false})
     @Column({type:'int', default: 0})
-    visits: number;
+    visits?: number;
 
     @ApiProperty({required: false})
     @Column({default: ""})
-    description: string;
+    description?: string;
 
     @ApiProperty({required: false})
     @Column({type: 'timestamp',  default: () => "CURRENT_TIMESTAMP"})
-    first_visit: Date;
+    first_visit?: Date;
 
     @ApiProperty({required: false})
     @Column({type: 'timestamp', default: () => "CURRENT_TIMESTAMP"})
-    last_visit: Date;
+    last_visit?: Date;
 
     @ApiProperty({required: false})
     @Column({type:'float', default: 0})
-    total_amount: number;
+    total_amount?: number;
 
     @ApiProperty({required: false})
     @Column({type:'float', default: 0})
-    average_check: number;
+    average_check?: number;
 }

@@ -10,38 +10,38 @@ export class CarwashEntity
 {
     @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @ApiProperty()
     @Column()
-    name: string;
+    name?: string;
 
     @ApiProperty()
     @Column()
-    address: string;
+    address?: string;
 
     @ApiProperty()
     @Column()
-    phone: string;
+    phone?: string;
     
     @ApiProperty()
     @Column()
-    workTime_weekday: string;
+    workTime_weekday?: string;
 
     @ApiProperty()
     @Column()
-    workTime_weekend: string;
+    workTime_weekend?: string;
 
     @ApiProperty()
     @Column({type:'float'})
-    rating: number;
+    rating?: number;
 
     @ApiProperty({required: false})
     @OneToMany(() => CategoryEntity, categories => categories.carwash)
-    service_categories: CategoryEntity[];
+    service_categories?: CategoryEntity[];
 
     @ApiProperty({required: false})
     @OneToMany(() => OrderEntity, order => order.carwash_entry)
-    orders_list: OrderEntity[];
+    orders_list?: OrderEntity[];
 
 }

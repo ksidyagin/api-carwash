@@ -10,22 +10,22 @@ import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, Primary
 export class CategoryEntity {
     @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @ApiProperty()
     @Column()
-    name: string;
+    name?: string;
 
     @ApiProperty({required: false})
     @OneToMany(() => ServiceEntity, service => service.category, { cascade: ['insert', 'update'] })
-    services: ServiceEntity[];
+    services?: ServiceEntity[];
 
     @ApiProperty({required: false})
     @OneToMany(() => WarehouseEntity, warehouse => warehouse.service_category)
-    warehouses: WarehouseEntity[];
+    warehouses?: WarehouseEntity[];
 
     @ApiProperty()
     @ManyToOne(() => CarwashEntity, carwash => carwash.service_categories)
-    carwash: CarwashEntity;
+    carwash?: CarwashEntity;
 
 }

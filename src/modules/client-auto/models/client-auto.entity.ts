@@ -9,34 +9,34 @@ import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOn
 export class ClientAutoEntity {
     @ApiProperty({required: false})
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
     
     @ApiProperty()
     @Column()
-    brand: string;
+    brand?: string;
 
     @ApiProperty()
     @Column()
-    model: string;
+    model?: string;
 
     @ApiProperty()
     @Column()
-    category: string;
+    category?: string;
 
     @ApiProperty()
     @Column()
-    state_number: string;
+    state_number?: string;
 
     @ApiProperty()
     @Column({type:'int'})
-    region: number;
+    region?: number;
 
     @ApiProperty()
     @ManyToOne(type => ClientEntity, client => client.cars, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
-    owner: ClientEntity;
+    owner?: ClientEntity;
 
     @ApiProperty({required: false})
     @OneToMany(type => OrderEntity, order => order.auto)
-    order_entries: OrderEntity[];
+    order_entries?: OrderEntity[];
 
 }

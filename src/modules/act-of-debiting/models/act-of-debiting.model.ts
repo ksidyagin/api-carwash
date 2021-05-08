@@ -9,7 +9,7 @@ export class ActOfDebiting {
     @ApiProperty()
     comment?: string;
 
-    @ApiProperty()
+    @ApiProperty({ type: () => Warehouse})
     warehouse_deleted?: Warehouse;
 
     @ApiProperty()
@@ -21,4 +21,9 @@ export class ActOfDebiting {
     @ApiProperty()
     count?: number;
 
+    @ApiProperty()
+    date?: Date;
+
+    @ApiProperty()
+    date_event?: Date;
 }

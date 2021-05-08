@@ -15,8 +15,11 @@ export class ReceiptInvoice {
     @ApiProperty()
     incoming_number?: string;   
 
-    @ApiProperty()
+    @ApiProperty({ type: () => Warehouse})
     warehouse_entry?: Warehouse;
+
+    @ApiProperty()
+    date?: Date;
 
     @ApiProperty()
     date_receipt?: Date;

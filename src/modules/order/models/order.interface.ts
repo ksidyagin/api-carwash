@@ -24,7 +24,7 @@ export class Order
     @ApiProperty()
     selected_time?: Date;
 
-    @ApiProperty()
+    @ApiProperty({required: false})
     status?: string;
 
     @ApiProperty({required: false})
@@ -35,4 +35,10 @@ export class Order
 
     @ApiProperty()
     total_price?: number;
+}
+
+export enum OrderStatus {
+    accepted = 'accepted',
+    completed = 'completed',
+    finished = 'finished'
 }
