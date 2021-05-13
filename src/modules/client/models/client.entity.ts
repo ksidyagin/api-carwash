@@ -18,6 +18,9 @@ export class ClientEntity {
     @Column()
     name?: string;
 
+    @Column({default: ""})
+    phone?: string;
+
     @ApiProperty({required: false})
     @OneToMany(type => ClientAutoEntity, auto => auto.owner, {cascade: true, onDelete: 'CASCADE', onUpdate: 'CASCADE'})
     cars?: ClientAutoEntity[];

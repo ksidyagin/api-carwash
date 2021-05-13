@@ -52,6 +52,7 @@ export class UserService {
                 newUser.role = UserRole.USER;
                 newClient.name = user.firstName;
                 newClient.description = "";
+                newClient.phone = user.phone;
                 newUser.client_entry = newClient;
                 const email : string = user.email;
                 return from(this.userRepository.findOne({email})).pipe(

@@ -22,12 +22,12 @@ export class ClientService {
   
   
     findOne(id: number): Observable<Client> {
-        return from(this.clientRepository.findOne({id}, {relations: ['cars']}));
+        return from(this.clientRepository.findOne({id}, {relations: ['cars', 'user_entry']}));
     }
   
     findAll(): Observable<Client[]> 
     {
-        return from(this.clientRepository.find({relations: ['cars']}));
+        return from(this.clientRepository.find({relations: ['cars', 'user_entry']}));
     }
   
     deleteOne(id: number): Observable<any> 

@@ -18,6 +18,9 @@ export class Client
     name?: string;
 
     @ApiProperty({required: false})
+    phone?: string;
+
+    @ApiProperty({required: false})
     visits?: number;
 
     @ApiProperty({required: false})

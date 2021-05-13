@@ -23,11 +23,18 @@ export class InternalDisplacementService {
         return from(this.productRepository.findOne({where: {name: nameProd, warehouse: displacement.warehouse_deleted}})).pipe(
             switchMap((prod: Product) => {
                 prod.count = prod.count - countProd;
-                if(prod.count < 0){
+                if(prod.count <= 0){
                     prod.count = 0;
-                } 
-                prod.warehouse = warehouseProd;
+                }
                 this.productRepository.update(prod.id, prod);
+                const newProd: ProductEntity = {
+                    id: 0,
+                    name: nameProd,
+                    count: countProd,
+                    warehouse: warehouseProd,
+                    measurement: prod.measurement
+                }
+                this.productRepository.save(newProd);
                 return from(this.displacementRepository.save(displacement)); 
             })
         )
