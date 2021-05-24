@@ -16,14 +16,22 @@ import { ClientEntity } from 'src/modules/client/models/client.entity';
 import { Client } from 'src/modules/client/models/client.interface';
 import { randomBytes } from 'crypto';
 import { TokenService } from 'src/modules/token/services/token.service';
+import { CarwashService } from 'src/modules/carwash/services/carwash/carwash.service';
+import { Carwash } from 'src/modules/carwash/models/carwash.interface';
+import { UserToCarwashEntity } from '../../user-to-carwash/models/user_to_carwash.entity';
 
+export class CarwashPayload{
+    id: number
+}
 
 @Injectable()
 export class UserService {
   constructor(
       @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
       @InjectRepository(ClientEntity) private readonly clientRepository: Repository<ClientEntity>,
-      private authService: AuthService, private tokenService: TokenService
+      @InjectRepository(UserToCarwashEntity) private readonly userToCarwashRepository: Repository<UserToCarwashEntity>,
+
+      private authService: AuthService, private tokenService: TokenService, private carwashService: CarwashService
   ){}
 
     private code: string;
@@ -125,14 +133,41 @@ export class UserService {
   }
 
   updateOne(id: number, user: User): Observable<any> {
-    //   delete user.email;
-    //   delete user.password;
-    //   delete user.role;
+      delete user.email;
+      delete user.password;
+      delete user.role;
       return from(this.userRepository.update(id, user));
   }
 
   updateRoleOfUser(id: number, user: User): Observable<any> {
       return from(this.userRepository.update(id, user));
+  }
+
+  addCarwashToUser(id: number, carwashId: CarwashPayload): Observable<any> {
+    return from(this.carwashService.findOne(carwashId.id)).pipe(
+        switchMap((carwash: Carwash) => {
+            if(carwash){
+                return from(this.userRepository.findOne(id)).pipe(
+                    switchMap((user: User) => {
+                        if(user){
+                            const relation: UserToCarwashEntity = {
+                                userToCarwashId: 0,
+                                userId: user.id,
+                                carwashId: carwash.id
+                            } 
+                            return from(this.userToCarwashRepository.save(relation))
+                        }
+                        else {
+                            throw new HttpException('This user does not exist', HttpStatus.BAD_REQUEST);
+                          }
+                    })
+                )
+            }
+            else {
+                throw new HttpException('This carwash does not exist', HttpStatus.BAD_REQUEST);
+              }   
+        })
+    );
   }
 
   login(user: User): Observable<string> {

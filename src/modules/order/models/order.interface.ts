@@ -9,7 +9,7 @@ export class Order
     @ApiProperty({required: false})
     id?: number;
 
-    @ApiProperty()
+    @ApiProperty({type: () => Carwash})
     carwash_entry?: Carwash;
 
     @ApiProperty({type: () => Client})

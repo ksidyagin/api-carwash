@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { access } from 'fs';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { Observable, of } from 'rxjs';
@@ -10,7 +10,7 @@ import { RolesGuard } from 'src/modules/auth/guards/roles.guard';
 import { AuthService, EmailSend } from 'src/modules/auth/services/auth.service';
 import { User, UserRole } from '../models/user.interface';
 import { ConfirmAccountDto } from '../service/accountConfirm';
-import { UserService } from '../service/user.service';
+import { CarwashPayload, UserService } from '../service/user.service';
 
 @ApiTags('users')
 @Controller('users')
@@ -59,12 +59,23 @@ export class UserController {
         return this.userService.updateOne(Number(id), user);
     }
 
-    @hasRoles(UserRole.ADMIN)
+    @hasRoles(UserRole.ADMIN || UserRole.MANAGER)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put(':id/role')
-    updateRoleOfUser(@Param('id')id: string, @Body() user: User ): Observable<User> {
+    @ApiBearerAuth() 
+    @Put('role/:id')
+    update(@Param('id')id: string , @Body()user: User): Observable<any>  {
         return this.userService.updateRoleOfUser(Number(id), user);
     }
+
+
+    @hasRoles(UserRole.ADMIN || UserRole.MANAGER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth() 
+    @Put('carwash/:id')
+    updateCarwash(@Param('id')id: string , @Body()carwash: CarwashPayload): Observable<any>  {
+        return this.userService.addCarwashToUser(Number(id), carwash);
+    }
+
 
     @Get('confirm/:token')
     async confirm(@Param('token')query: string): Promise<boolean> {

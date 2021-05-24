@@ -19,6 +19,7 @@ import { TokenModule } from './modules/token/token.module';
 import { ActOfDebitingModule } from './modules/act-of-debiting/act-of-debiting.module';
 import { InternalDisplacementModule } from './modules/internal-displacement/internal-displacement.module';
 import { ReceiptInvoiceModule } from './modules/receipt-invoice/receipt-invoice.module';
+import { UserToCarwashModule } from './modules/user-to-carwash/user-to-carwash.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -65,8 +66,8 @@ import { ReceiptInvoiceModule } from './modules/receipt-invoice/receipt-invoice.
     ActOfDebitingModule,
     InternalDisplacementModule,
     WarehouseModule,
-    ProductModule
-    
+    ProductModule,
+    UserToCarwashModule
     
   ],
   controllers: [AppController],

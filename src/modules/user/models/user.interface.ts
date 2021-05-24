@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Carwash } from "src/modules/carwash/models/carwash.interface";
 import { Client } from "src/modules/client/models/client.interface";
+import { UserToCarwash } from "../../user-to-carwash/models/userToCarwash.model";
 
 export class User {
 
@@ -32,6 +34,9 @@ export class User {
 
     @ApiProperty()
     status?: UserStatus;
+
+    // @ApiProperty({required: false, type: () => [UserToCarwash]})
+    // userToCarwash?: UserToCarwash[];
 }
 
 export enum UserRole {

@@ -1,9 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { type } from "os";
+import { CarwashEntity } from "src/modules/carwash/models/carwash.entity";
 import { ClientEntity } from "src/modules/client/models/client.entity";
 import { Client } from "src/modules/client/models/client.interface";
-import { BeforeInsert, Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { UserRole, UserStatus } from "./user.interface";
+import { UserToCarwashEntity } from "../../user-to-carwash/models/user_to_carwash.entity";
 
 
 @Entity()
@@ -50,4 +52,9 @@ export class UserEntity {
     @ApiProperty()
     @Column({type: 'enum', enum: UserStatus, default: UserStatus.pending })
     status?: UserStatus;
+
+    // @OneToMany(() => UserToCarwashEntity, userToCarwash => userToCarwash.user)
+    // public userToCarwash?: UserToCarwashEntity[];
+    
+
 }
