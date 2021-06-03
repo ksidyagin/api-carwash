@@ -43,7 +43,8 @@ export enum UserRole {
     ADMIN = 'admin',
     USER = 'user',
     EXECUTOR = 'executor',
-    MANAGER = 'manager'
+    MANAGER = 'manager',
+    SUPERADMIN = 'superadmin'
 }
 
 export enum UserStatus {

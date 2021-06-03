@@ -11,6 +11,8 @@ import { TokenModule } from '../token/token.module';
 import { CarwashModule } from '../carwash/carwash.module';
 import { UserToCarwashEntity } from '../user-to-carwash/models/user_to_carwash.entity';
 import { UserToCarwashModule } from '../user-to-carwash/user-to-carwash.module';
+import { ClientAutoModule } from '../client-auto/client-auto.module';
+import { OrderModule } from '../order/order.module';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { UserToCarwashModule } from '../user-to-carwash/user-to-carwash.module';
     forwardRef(()=> ClientModule),
     forwardRef(() => TokenModule),
     forwardRef(() => CarwashModule),
-    forwardRef(()=> UserToCarwashModule)
+    forwardRef(()=> UserToCarwashModule),
+    forwardRef(() => ClientAutoModule),
+    forwardRef(() => OrderModule)
   ],
   providers: [UserService],
   controllers: [UserController],

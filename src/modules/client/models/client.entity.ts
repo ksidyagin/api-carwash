@@ -26,7 +26,7 @@ export class ClientEntity {
     cars?: ClientAutoEntity[];
 
     @ApiProperty({required: false})
-    @OneToOne(type => UserEntity, user => user.client_entry, {onDelete: 'CASCADE', onUpdate: 'CASCADE'})
+    @OneToOne(type => UserEntity, user => user.client_entry)
     user_entry?: UserEntity;
 
     @ApiProperty({required: false})

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ClientAutoEntity } from 'src/modules/client-auto/models/client-auto.entity';
+import { OrderEntity } from 'src/modules/order/models/order.entity';
 import { Repository } from 'typeorm';
 import { ClientEntity } from '../../models/client.entity';
 import { Client } from '../../models/client.interface';
@@ -11,7 +12,8 @@ import { Client } from '../../models/client.interface';
 export class ClientService {
     constructor(
         @InjectRepository(ClientEntity) private readonly clientRepository: Repository<ClientEntity>,
-        @InjectRepository(ClientAutoEntity) private readonly clientAutoRepository: Repository<ClientAutoEntity>
+        @InjectRepository(ClientAutoEntity) private readonly clientAutoRepository: Repository<ClientAutoEntity>,
+        @InjectRepository(OrderEntity) private readonly orderRepository: Repository<OrderEntity>
         ){}
   
   
@@ -22,21 +24,24 @@ export class ClientService {
   
   
     findOne(id: number): Observable<Client> {
-        return from(this.clientRepository.findOne({id}, {relations: ['cars', 'user_entry']}));
+        return from(this.clientRepository.findOne({id}, {relations: ['cars']}));
     }
   
     findAll(): Observable<Client[]> 
     {
-        return from(this.clientRepository.find({relations: ['cars', 'user_entry']}));
+        return from(this.clientRepository.find({relations: ['cars']}));
     }
   
     deleteOne(id: number): Observable<any> 
     {
-       return from(this.clientRepository.findOne({id}, {relations: ['cars']})).pipe(
+       return from(this.clientRepository.findOne({id}, {relations: ['cars', 'orders']})).pipe(
            map((client: Client) => {
-               if(client){
+               if(client){  
                    for(let i =0; i< client.cars.length; i++){
                     this.clientAutoRepository.delete(client.cars[i].id);
+                   }
+                   for(let i =0; i< client.orders.length; i++){
+                    this.orderRepository.delete(client.orders[i].id);
                    }
                    return from(this.clientRepository.delete(id));
                }

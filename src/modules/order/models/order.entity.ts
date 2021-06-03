@@ -21,7 +21,7 @@ export class OrderEntity {
     client_entry?: ClientEntity;
 
     @ApiProperty()
-    @ManyToOne(() => ClientAutoEntity, auto => auto.order_entries)
+    @ManyToOne(() => ClientAutoEntity, auto => auto.order_entries, {cascade: true})
     auto?: ClientAutoEntity;
 
     @ApiProperty()

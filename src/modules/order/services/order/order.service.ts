@@ -18,12 +18,12 @@ export class OrderService {
   
   
     findOne(id: number): Observable<Order> {
-        return from(this.orderRepository.findOne({id}, {relations: ['carwash_entry', 'client_entry']}));
+        return from(this.orderRepository.findOne({id}, {relations: ['carwash_entry', 'client_entry', 'auto']}));
     }
   
     findAll(): Observable<Order[]> 
     {
-        return from(this.orderRepository.find({relations: ['carwash_entry', 'client_entry']}));
+        return from(this.orderRepository.find({relations: ['carwash_entry', 'client_entry', 'auto']}));
     }
   
     deleteOne(id: number): Observable<any> 

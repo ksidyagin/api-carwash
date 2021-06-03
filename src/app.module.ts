@@ -20,6 +20,8 @@ import { ActOfDebitingModule } from './modules/act-of-debiting/act-of-debiting.m
 import { InternalDisplacementModule } from './modules/internal-displacement/internal-displacement.module';
 import { ReceiptInvoiceModule } from './modules/receipt-invoice/receipt-invoice.module';
 import { UserToCarwashModule } from './modules/user-to-carwash/user-to-carwash.module';
+import { EmployeeData } from './modules/employee-data/models/employee-data.model';
+import { EmployeeDataModule } from './modules/employee-data/employee-data.module';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -67,7 +69,8 @@ import { UserToCarwashModule } from './modules/user-to-carwash/user-to-carwash.m
     InternalDisplacementModule,
     WarehouseModule,
     ProductModule,
-    UserToCarwashModule
+    UserToCarwashModule,
+    EmployeeDataModule
     
   ],
   controllers: [AppController],

@@ -26,10 +26,51 @@ export class UserController {
         );
     }
 
+    @hasRoles(UserRole.ADMIN || UserRole.MANAGER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth() 
+    @Post('createExecutor')
+    async createExecutor(@Body()user: User): Promise<Observable<User | Object>> {
+        return (await this.userService.createExecutor(user)).pipe(
+            map((user: User) => user),
+            catchError(err => of({error: err.message}))
+        );
+    }
+
+    @hasRoles(UserRole.MANAGER)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth() 
+    @Post('createAdmin')
+    async createAdmin(@Body()user: User): Promise<Observable<User | Object>> {
+        return (await this.userService.createAdmin(user)).pipe(
+            map((user: User) => user),
+            catchError(err => of({error: err.message}))
+        );
+    }
+
+    @hasRoles(UserRole.SUPERADMIN)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth() 
+    @Post('createManager')
+    async createManager(@Body()user: User): Promise<Observable<User | Object>> {
+        return (await this.userService.createManager(user)).pipe(
+            map((user: User) => user),
+            catchError(err => of({error: err.message}))
+        );
+    }
+
     @Post('login')
-    
     login(@Body()user: User): Observable<Object> {
         return this.userService.login(user).pipe(
+            map((jwt: string) => {return {access_token: jwt}  
+        }),
+        catchError(err => of({ error: err.message}))
+        )
+    }
+
+    @Post('loginSuperAdmin')
+    loginSuperAdmin(@Body()user: User): Observable<Object> {
+        return this.userService.loginSuperAdmin(user).pipe(
             map((jwt: string) => {return {access_token: jwt}  
         }),
         catchError(err => of({ error: err.message}))
@@ -49,6 +90,9 @@ export class UserController {
         return this.userService.paginate({page: Number(page), limit: Number(limit), route: 'http://localhost:3000/api/users' });
     }
 
+    @hasRoles(UserRole.SUPERADMIN)
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @ApiBearerAuth() 
     @Delete(':id')
     deleteOne(@Param('id')id: string): Observable<User> {
         return this.userService.deleteOne(Number(id));
@@ -59,7 +103,7 @@ export class UserController {
         return this.userService.updateOne(Number(id), user);
     }
 
-    @hasRoles(UserRole.ADMIN || UserRole.MANAGER)
+    @hasRoles(UserRole.MANAGER)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @ApiBearerAuth() 
     @Put('role/:id')

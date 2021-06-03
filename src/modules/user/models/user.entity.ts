@@ -44,8 +44,7 @@ export class UserEntity {
 
     @ApiProperty({required: false})
     @OneToOne(() => ClientEntity, client => client.user_entry, {cascade: true,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE', eager: true})
+        onDelete: 'CASCADE'})
     @JoinColumn()
     client_entry?: ClientEntity;
     

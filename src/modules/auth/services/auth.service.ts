@@ -27,6 +27,7 @@ export class AuthService {
         return from(this.jwtService.signAsync({user}));
     }
 
+
     hashPassword(password: string): Observable <string> {
         return from<string>(bcrypt.hash(password, 12));
 
@@ -92,5 +93,43 @@ export class AuthService {
          .then(() => {})
          .catch(() => {});
    
-     }
+    }
+
+     sendEmailStaff(user: UserEntity) {
+        const expiresIn = 60 * 60 * 24; // 24 hours
+        const tokenPayload: ITokenPayload = {
+            id: user.id,
+            status: user.status,
+            role: user.role,
+        };
+        const expireAtMoment = moment()
+            .add(1, 'day')
+            .toISOString();
+
+        const token =  this.generateToken(tokenPayload, { expiresIn });
+        const confirmLink = `${process.env.API_URL}/users/confirm/${token}`;
+        const tokenVerify: TokenVerifyEntity = {
+            id: user.id,
+            token: token,
+            expireAt: expireAtMoment
+        };
+        this.saveToken(tokenVerify);
+
+        this.mailerService.sendMail({
+           to: `${user.email}`, // list of receivers
+           from: `${process.env.MAILDEV_USER}`, // sender address
+           subject: 'Testing Nest MailerModule ✔', // Subject line
+           text: 'welcome!', // plaintext body
+           html: `<b>Welcome!</b> <br>
+           <p>Your email: ${user.email}</p>
+           <p>Your password: ${user.password}</p> 
+           <p>(Dont show it anyone, also after registration you should change this password)</p>
+
+           <p>Please use this <a href="${confirmLink}">link</a> to confirm your account.</p>
+           Don't tell it anyone!`, // HTML body content
+         })
+         .then(() => {})
+         .catch(() => {});
+   
+    }
 }
