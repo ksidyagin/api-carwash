@@ -11,10 +11,16 @@ export class EmployeeDataEntity {
     worker_id?: number;
 
     @Column()
-    salary: number;
+    worker_name?: string;
 
     @Column()
-    bet: string;
+    salary_day?: number;
+
+    @Column()
+    salary_night?: number;
+
+    @Column()
+    bet?: string;
 
    
 }

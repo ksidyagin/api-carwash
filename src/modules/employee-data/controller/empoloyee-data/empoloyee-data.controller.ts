@@ -5,8 +5,8 @@ import { JwtAuthGuard } from 'src/modules/auth/guards/jwt-guard';
 import { EmployeeData } from '../../models/employee-data.model';
 import { EmployeeDataService } from '../../service/employee-data.service';
 
-@ApiTags('empoloyee-data')
-@Controller('empoloyee-data')
+@ApiTags('employee-data')
+@Controller('employee-data')
 export class EmpoloyeeDataController {
 
     constructor(private employeeDataService: EmployeeDataService) {}

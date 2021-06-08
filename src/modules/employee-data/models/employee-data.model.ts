@@ -9,10 +9,16 @@ export class EmployeeData {
     worker_id?: number;
 
     @ApiProperty()
-    salary: number;
+    worker_name?: string;
 
     @ApiProperty()
-    bet: string;
+    salary_day?: number;
+
+    @ApiProperty()
+    salary_night?: number;
+
+    @ApiProperty()
+    bet?: string;
 
    
 }
